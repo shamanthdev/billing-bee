@@ -1,127 +1,104 @@
 package com.billing.billingapp.product.controller;
 
+import com.billing.billingapp.common.exception.ResourceNotFoundException;
 import com.billing.billingapp.product.Product;
 import com.billing.billingapp.product.ProductRepository;
 import com.billing.billingapp.product.dto.ProductRequestDto;
 import com.billing.billingapp.product.dto.ProductResponseDto;
+import com.billing.billingapp.product.service.ProductService;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/api/products")    
 public class ProductController {
 
     private final ProductRepository productRepository;
+    private final ProductService productService;
 
-    public ProductController(ProductRepository productRepository) {
+    public ProductController(ProductRepository productRepository, ProductService productService) {
         this.productRepository = productRepository;
+        this.productService = productService;
     }
 
     //post method for product creation
     @PostMapping
-    public ProductResponseDto createProduct(@RequestBody ProductRequestDto dto) {
-
-        Product product = new Product();
-        product.setName(dto.getName());
-        product.setSku(dto.getSku());
-        product.setBarcode(dto.getBarcode());
-        product.setCostPrice(dto.getCostPrice());
-        product.setSellingPrice(dto.getSellingPrice());
-        product.setMrp(dto.getMrp());
-        product.setTaxPercent(dto.getTaxPercent());
-        product.setDiscountPercent(dto.getDiscountPercent());
-        product.setStockQuantity(dto.getStockQuantity());
-        product.setReorderLevel(dto.getReorderLevel());
-        product.setUnit(dto.getUnit());
-        product.setCategory(dto.getCategory());
-        product.setBrand(dto.getBrand());
-        product.setBatchNumber(dto.getBatchNumber());
-        product.setExpiryDate(dto.getExpiryDate());
-        product.setHsnCode(dto.getHsnCode());
-
+    public ProductResponseDto createProduct(
+            @Valid @RequestBody ProductRequestDto dto
+    ) {
+        Product product = mapToEntity(dto);
         Product saved = productRepository.save(product);
-
-        ProductResponseDto response = new ProductResponseDto();
-        response.setId(saved.getId());
-        response.setName(saved.getName());
-        response.setSku(saved.getSku());
-        response.setBarcode(saved.getBarcode());
-        response.setSellingPrice(saved.getSellingPrice());
-        response.setTaxPercent(saved.getTaxPercent());
-        response.setDiscountPercent(saved.getDiscountPercent());
-        response.setStockQuantity(saved.getStockQuantity());
-        response.setUnit(saved.getUnit());
-        response.setCategory(saved.getCategory());
-        response.setBrand(saved.getBrand());
-        response.setBatchNumber(saved.getBatchNumber());
-        response.setExpiryDate(saved.getExpiryDate());
-        response.setActive(saved.getActive());
-
-        return response;
+        return mapToResponse(saved);
     }
 
     //listing product method
     @GetMapping
     public List<ProductResponseDto> getAllProducts() {
-
-        return productRepository.findAll()
+        return productRepository.findByActiveTrue()
                 .stream()
-                .map(product -> {
-                    ProductResponseDto dto = new ProductResponseDto();
-                    dto.setId(product.getId());
-                    dto.setName(product.getName());
-                    dto.setSku(product.getSku());
-                    dto.setBarcode(product.getBarcode());
-                    dto.setSellingPrice(product.getSellingPrice());
-                    dto.setTaxPercent(product.getTaxPercent());
-                    dto.setDiscountPercent(product.getDiscountPercent());
-                    dto.setStockQuantity(product.getStockQuantity());
-                    dto.setUnit(product.getUnit());
-                    dto.setCategory(product.getCategory());
-                    dto.setBrand(product.getBrand());
-                    dto.setBatchNumber(product.getBatchNumber());
-                    dto.setExpiryDate(product.getExpiryDate());
-                    dto.setActive(product.getActive());
-                    return dto;
-                })
+                .map(this::mapToResponse)
                 .toList();
     }
 
-//    get product by id method
+    //    get product by id method
     @GetMapping("/{id}")
     public ProductResponseDto getProductById(@PathVariable Long id) {
 
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .filter(Product::getActive)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Product not found with id: " + id)
+                );
 
-        ProductResponseDto dto = new ProductResponseDto();
-        dto.setId(product.getId());
-        dto.setName(product.getName());
-        dto.setSku(product.getSku());
-        dto.setBarcode(product.getBarcode());
-        dto.setSellingPrice(product.getSellingPrice());
-        dto.setTaxPercent(product.getTaxPercent());
-        dto.setDiscountPercent(product.getDiscountPercent());
-        dto.setStockQuantity(product.getStockQuantity());
-        dto.setUnit(product.getUnit());
-        dto.setCategory(product.getCategory());
-        dto.setBrand(product.getBrand());
-        dto.setBatchNumber(product.getBatchNumber());
-        dto.setExpiryDate(product.getExpiryDate());
-        dto.setActive(product.getActive());
-
-        return dto;
+        return mapToResponse(product);
     }
 
     //put mappind update product
     @PutMapping("/{id}")
     public ProductResponseDto updateProduct(
             @PathVariable Long id,
-            @RequestBody ProductRequestDto dto) {
+            @Valid @RequestBody ProductRequestDto dto
+    ) {
 
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+
+
+        // update fields (DO NOT create new Product)
+        product.setName(dto.getName());
+        product.setSku(dto.getSku());
+        product.setBarcode(dto.getBarcode());
+        product.setCostPrice(dto.getCostPrice());
+        product.setSellingPrice(dto.getSellingPrice());
+        product.setMrp(dto.getMrp());
+        product.setTaxPercent(dto.getTaxPercent());
+        product.setDiscountPercent(dto.getDiscountPercent());
+        product.setStockQuantity(dto.getStockQuantity());
+        product.setReorderLevel(dto.getReorderLevel());
+        product.setUnit(dto.getUnit());
+        product.setCategory(dto.getCategory());
+        product.setBrand(dto.getBrand());
+        product.setBatchNumber(dto.getBatchNumber());
+        product.setExpiryDate(dto.getExpiryDate());
+
+        Product updated = productRepository.save(product);
+
+        return mapToResponse(updated);
+    }
+
+
+    @PutMapping("/{id}/disable")
+    public ResponseEntity<Void> disableProduct(@PathVariable Long id) {
+        productService.disableProduct(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    private Product mapToEntity(ProductRequestDto dto) {
+        Product product = new Product();
 
         product.setName(dto.getName());
         product.setSku(dto.getSku());
@@ -138,28 +115,31 @@ public class ProductController {
         product.setBrand(dto.getBrand());
         product.setBatchNumber(dto.getBatchNumber());
         product.setExpiryDate(dto.getExpiryDate());
-        product.setHsnCode(dto.getHsnCode());
 
-        Product updated = productRepository.save(product);
+        product.setActive(true); // important
 
-        ProductResponseDto response = new ProductResponseDto();
-        response.setId(updated.getId());
-        response.setName(updated.getName());
-        response.setSellingPrice(updated.getSellingPrice());
-        response.setStockQuantity(updated.getStockQuantity());
-        response.setActive(updated.getActive());
-
-        return response;
+        return product;
     }
 
-    @PatchMapping("/{id}/disable")
-    public void disableProduct(@PathVariable Long id) {
+    private ProductResponseDto mapToResponse(Product product) {
+        ProductResponseDto res = new ProductResponseDto();
 
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+        res.setId(product.getId());
+        res.setName(product.getName());
+        res.setSku(product.getSku());
+        res.setBarcode(product.getBarcode());
+        res.setSellingPrice(product.getSellingPrice());
+        res.setTaxPercent(product.getTaxPercent());
+        res.setDiscountPercent(product.getDiscountPercent());
+        res.setStockQuantity(product.getStockQuantity());
+        res.setUnit(product.getUnit());
+        res.setCategory(product.getCategory());
+        res.setBrand(product.getBrand());
+        res.setBatchNumber(product.getBatchNumber());
+        res.setExpiryDate(product.getExpiryDate());
+        res.setActive(product.getActive());
 
-        product.setActive(false);
-        productRepository.save(product);
+        return res;
     }
 
 
