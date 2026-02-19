@@ -34,6 +34,7 @@ public class Product {
     private LocalDate expiryDate;
     private String hsnCode;
 
+    @Column(nullable = false)
     private Boolean active = true;
 
     private LocalDateTime createdAt;
@@ -210,5 +211,9 @@ public class Product {
 
     public void setUnit(String unit) {
         this.unit = unit;
+    }
+
+    public BigDecimal getGstPercent() {
+        return discountPercent;
     }
 }

@@ -4,21 +4,21 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 
 
 public class ProductRequestDto {
 
-    @NotBlank
+    @NotBlank(message = "Name is required")
     private String name;
 
-    private String name;
     private String sku;
     private String barcode;
 
     private BigDecimal costPrice;
-    @NotNull
-    @PositiveOrZero
+    @NotNull(message = "Selling price is required")
+    @Positive(message = "Selling price must be greater than 0")
     private BigDecimal sellingPrice;
     private BigDecimal mrp;
     private BigDecimal taxPercent;

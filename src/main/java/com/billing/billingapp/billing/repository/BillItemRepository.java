@@ -1,4 +1,7 @@
-package com.billing.billingapp.billing.reposiory;
+package com.billing.billingapp.billing.repository;
 
-public class BillItemRepository {
+import com.billing.billingapp.billing.entity.BillItem;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface BillItemRepository extends JpaRepository<BillItem, Long> {
 }
