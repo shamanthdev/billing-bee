@@ -1,0 +1,24 @@
+# Git
+.git
+.gitignore
+
+# Maven build output
+target/
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+
+# Logs
+*.log
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Docker related
+docker-compose.yml
+
+# Tests output
+surefire-reports/
