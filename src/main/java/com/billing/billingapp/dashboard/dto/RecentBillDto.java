@@ -1,4 +1,13 @@
-package com.billing.billingapp.dashboard;
+package com.billing.billingapp.dashboard.dto;
 
-public class RecentBillDto {
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+public interface RecentBillDto {
+
+    String getBillNumber();
+
+    LocalDateTime getBillDate();
+
+    BigDecimal getTotalAmount();
 }
