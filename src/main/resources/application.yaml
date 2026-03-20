@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/billing_db
     username: postgres
-    password: postgress123
+    password: postgres123
 
   jpa:
     hibernate:

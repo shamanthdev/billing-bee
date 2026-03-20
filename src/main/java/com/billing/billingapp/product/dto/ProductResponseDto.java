@@ -9,9 +9,18 @@ public class ProductResponseDto {
     private String name;
     private String sku;
     private String barcode;
-
+    private BigDecimal costPrice;
     private BigDecimal sellingPrice;
     private BigDecimal taxPercent;
+
+    public BigDecimal getCostPrice() {
+        return costPrice;
+    }
+
+    public void setCostPrice(BigDecimal costPrice) {
+        this.costPrice = costPrice;
+    }
+
     private BigDecimal discountPercent;
 
     private Integer stockQuantity;
@@ -21,6 +30,15 @@ public class ProductResponseDto {
 
     private String batchNumber;
     private LocalDate expiryDate;
+    private String hsnCode;
+
+    public String getHsnCode() {
+        return hsnCode;
+    }
+
+    public void setHsnCode(String hsnCode) {
+        this.hsnCode = hsnCode;
+    }
 
     private Boolean active;
 
