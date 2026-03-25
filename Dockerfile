@@ -3,16 +3,14 @@ FROM maven:3.9.9-eclipse-temurin-21 AS build
 
 WORKDIR /app
 
-# Copy pom first (for caching)
-COPY pom.xml .
-COPY mvnw .
-COPY .mvn .mvn
-
-RUN chmod +x mvnw
-RUN ./mvnw dependency:go-offline
-
-# Copy full project
+# Copy everything
 COPY . .
+
+# 🔥 IMPORTANT: make mvnw executable AFTER copy
+RUN chmod +x mvnw
+
+# Download dependencies (cache layer)
+RUN ./mvnw dependency:go-offline
 
 # Build jar
 RUN ./mvnw clean package -DskipTests
