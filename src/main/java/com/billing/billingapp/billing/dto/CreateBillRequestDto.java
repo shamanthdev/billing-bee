@@ -26,4 +26,7 @@ public class CreateBillRequestDto {
     // optional (future-ready)
     private Long customerId;
     private String notes;
+    private String phoneNumber; // 🔥 NEW
+
+    private String paymentType; // RECEIVED / CREDIT
 }

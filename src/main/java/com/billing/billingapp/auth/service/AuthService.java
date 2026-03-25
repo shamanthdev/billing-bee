@@ -1,4 +1,5 @@
 package com.billing.billingapp.auth.service;
+import com.billing.billingapp.auth.dto.AuthResponseDto;
 import com.billing.billingapp.auth.dto.LoginRequestDto;
 import com.billing.billingapp.auth.dto.ResetPasswordDto;
 import com.billing.billingapp.auth.dto.SignupRequestDto;
@@ -34,10 +35,15 @@ public class AuthService {
         user.setPassword(encoder.encode(request.getPassword()));
         user.setRole("ADMIN");
 
+        user.setBusinessName(request.getBusinessName());
+        user.setAddress(request.getAddress());
+        user.setPhone(request.getPhone());
+        user.setGstNumber(request.getGstNumber());
+
         userRepository.save(user);
     }
 
-    public String login(LoginRequestDto request) {
+    public AuthResponseDto login(LoginRequestDto request) {
 
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -46,7 +52,17 @@ public class AuthService {
             throw new RuntimeException("Invalid password");
         }
 
-        return jwtUtil.generateToken(user.getEmail());
+        String token = jwtUtil.generateToken(user.getEmail());
+
+        return new AuthResponseDto(
+                token,
+                user.getEmail(),
+                user.getName(),
+                user.getBusinessName(),
+                user.getAddress(),
+                user.getPhone(),
+                user.getGstNumber()
+        );
     }
 //    public User login(LoginRequestDto request) {
 //

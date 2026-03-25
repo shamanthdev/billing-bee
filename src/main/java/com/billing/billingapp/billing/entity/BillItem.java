@@ -81,6 +81,7 @@ public class BillItem {
         return productName;
     }
 
+
     public void setProductName(String productName) {
         this.productName = productName;
     }

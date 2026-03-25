@@ -1,5 +1,6 @@
 package com.billing.billingapp.auth.controller;
 
+import com.billing.billingapp.auth.dto.AuthResponseDto;
 import com.billing.billingapp.auth.dto.LoginRequestDto;
 import com.billing.billingapp.auth.dto.ResetPasswordDto;
 import com.billing.billingapp.auth.dto.SignupRequestDto;
@@ -7,6 +8,7 @@ import com.billing.billingapp.auth.entity.User;
 import com.billing.billingapp.auth.service.AuthService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -27,9 +29,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public Map<String, String> login(@RequestBody LoginRequestDto dto) {
-        String token = authService.login(dto);
-        return Map.of("token", token);
+    public ResponseEntity<AuthResponseDto> login(@RequestBody LoginRequestDto request) {
+        return ResponseEntity.ok(authService.login(request));
     }
 
 //    @PostMapping("/login")

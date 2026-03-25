@@ -4,7 +4,7 @@ import com.billing.billingapp.report.dto.SalesReportDto;
 import com.billing.billingapp.report.service.ReportService;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -16,12 +16,14 @@ public class ReportController {
     public ReportController(ReportService reportService) {
         this.reportService = reportService;
     }
-
     @GetMapping("/sales")
     public List<SalesReportDto> getSalesReport(
-            @RequestParam LocalDateTime fromDate,
-            @RequestParam LocalDateTime toDate
+            @RequestParam LocalDate fromDate,
+            @RequestParam LocalDate toDate
     ) {
-        return reportService.getSalesReport(fromDate, toDate);
+        return reportService.getSalesReport(
+                fromDate.atStartOfDay(),
+                toDate.atTime(23, 59, 59)
+        );
     }
 }

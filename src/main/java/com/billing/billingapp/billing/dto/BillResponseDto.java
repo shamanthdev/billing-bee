@@ -1,4 +1,7 @@
 package com.billing.billingapp.billing.dto;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -103,6 +106,36 @@ public class BillResponseDto {
     public void setTotal(BigDecimal total) {
         this.total = total;
     }
+
+    private String phoneNumber;
+    @Enumerated(EnumType.STRING)
+    private String paymentType;
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getPaymentType() {
+        return paymentType;
+    }
+
+    public void setPaymentType(String paymentType) {
+        this.paymentType = paymentType;
+    }
+
+    public BigDecimal getBalanceAmount() {
+        return balanceAmount;
+    }
+
+    public void setBalanceAmount(BigDecimal balanceAmount) {
+        this.balanceAmount = balanceAmount;
+    }
+
+    private BigDecimal balanceAmount;
 
     public List<BillItemResponseDto> getItems() {
         return items;

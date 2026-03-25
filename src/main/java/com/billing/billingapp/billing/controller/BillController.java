@@ -3,6 +3,7 @@ package com.billing.billingapp.billing.controller;
 import com.billing.billingapp.billing.dto.BillListResponseDto;
 import com.billing.billingapp.billing.dto.BillResponseDto;
 import com.billing.billingapp.billing.dto.CreateBillRequestDto;
+import com.billing.billingapp.billing.dto.PayBillRequestDto;
 import com.billing.billingapp.billing.repository.BillRepository;
 import com.billing.billingapp.billing.service.BillService;
 import org.springframework.data.domain.Page;
@@ -45,6 +46,15 @@ public class BillController {
     @GetMapping("/details/{id}")
     public ResponseEntity<BillResponseDto> getBillById(@PathVariable Long id) {
         return ResponseEntity.ok(billService.getBillById(id));
+    }
+
+    @PutMapping("/{billId}/pay")
+    public ResponseEntity<String> payBill(
+            @PathVariable Long billId,
+            @RequestBody PayBillRequestDto dto
+    ) {
+        billService.payBill(billId, dto);
+        return ResponseEntity.ok("Payment updated successfully");
     }
 
 

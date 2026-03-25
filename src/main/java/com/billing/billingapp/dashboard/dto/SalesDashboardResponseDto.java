@@ -1,11 +1,12 @@
 package com.billing.billingapp.dashboard.dto;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class SalesDashboardResponseDto {
 
-    private Double totalSales;
-    private Double todaySales;
+    private BigDecimal  totalSales;
+    private BigDecimal todaySales;
     private Long totalBills;
     private List<RecentBillDto> recentBills;
     private List<DailySalesDto> dailySales;
@@ -14,8 +15,8 @@ public class SalesDashboardResponseDto {
     }
 
     public SalesDashboardResponseDto(
-            Double totalSales,
-            Double todaySales,
+            BigDecimal  totalSales,
+            BigDecimal  todaySales,
             Long totalBills,
             List<RecentBillDto> recentBills,
             List<DailySalesDto> dailySales
@@ -27,19 +28,19 @@ public class SalesDashboardResponseDto {
         this.dailySales = dailySales;
     }
 
-    public Double getTotalSales() {
+    public BigDecimal  getTotalSales() {
         return totalSales;
     }
 
-    public void setTotalSales(Double totalSales) {
+    public void setTotalSales(BigDecimal  totalSales) {
         this.totalSales = totalSales;
     }
 
-    public Double getTodaySales() {
+    public BigDecimal  getTodaySales() {
         return todaySales;
     }
 
-    public void setTodaySales(Double todaySales) {
+    public void setTodaySales(BigDecimal  todaySales) {
         this.todaySales = todaySales;
     }
 

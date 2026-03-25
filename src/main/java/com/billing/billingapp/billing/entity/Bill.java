@@ -47,6 +47,13 @@ public class Bill {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private BillStatus status;
+    private String phoneNumber; // 🔥 for walk-in
+
+    @Enumerated(EnumType.STRING)
+    private PaymentType paymentType; // RECEIVED / CREDIT
+
+    @Column(nullable = false)
+    private BigDecimal balanceAmount = BigDecimal.ZERO;
 
     @OneToMany(
             mappedBy = "bill",
@@ -54,4 +61,7 @@ public class Bill {
             orphanRemoval = true
     )
     private List<BillItem> items = new ArrayList<>();
+
+    public void setPaymentStatus(String paid) {
+    }
 }

@@ -1,31 +1,49 @@
 package com.billing.billingapp.report.dto;
+import com.billing.billingapp.billing.entity.PaymentType;
 
-import com.billing.billingapp.billing.entity.BillStatus;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class SalesReportDto {
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
+public class SalesReportDto {
+    private Long id;
     private String billNumber;
     private LocalDateTime billDate;
     private String customerName;
     private BigDecimal total;
-    private BillStatus status;
+    private PaymentType paymentType;
+
+    public void setBillNumber(String billNumber) {
+        this.billNumber = billNumber;
+    }
+
+    public PaymentType getPaymentType() {
+        return paymentType;
+    }
+
+    public void setPaymentType(PaymentType paymentType) {
+        this.paymentType = paymentType;
+    }
 
     public SalesReportDto(
+            Long id,
             String billNumber,
             LocalDateTime billDate,
             String customerName,
             BigDecimal total,
-            BillStatus status
+            PaymentType paymentType
     ) {
+        this.id = id;
         this.billNumber = billNumber;
         this.billDate = billDate;
         this.customerName = customerName;
         this.total = total;
-        this.status = status;
+        this.paymentType = paymentType;
     }
-
+    public Long getId() {
+        return id;
+    }
     public String getBillNumber() {
         return billNumber;
     }
@@ -42,7 +60,4 @@ public class SalesReportDto {
         return total;
     }
 
-    public BillStatus getStatus() {
-        return status;
-    }
 }

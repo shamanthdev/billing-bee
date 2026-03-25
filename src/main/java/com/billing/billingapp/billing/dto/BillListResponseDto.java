@@ -20,6 +20,8 @@ public class BillListResponseDto {
     private BigDecimal discount;
     private BigDecimal gstAmount;
     private String status;
+    private BigDecimal balanceAmount;
+    private String paymentType;
 
     public String getStatus() {
         return status;
@@ -104,4 +106,19 @@ public class BillListResponseDto {
     }
 
 
+    public BigDecimal getBalanceAmount() {
+        return balanceAmount;
+    }
+
+    public void setBalanceAmount(BigDecimal balanceAmount) {
+        this.balanceAmount = balanceAmount;
+    }
+
+    public String getPaymentType() {
+        return paymentType;
+    }
+
+    public void setPaymentType(String paymentType) {
+        this.paymentType = paymentType;
+    }
 }
