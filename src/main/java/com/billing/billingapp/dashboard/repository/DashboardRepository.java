@@ -6,27 +6,29 @@ import com.billing.billingapp.dashboard.dto.RecentBillDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface DashboardRepository extends JpaRepository<Bill, Long> {
 
     @Query(value = "SELECT SUM(total) FROM bills", nativeQuery = true)
-    Double getTotalSales();
+    BigDecimal getTotalSales();
 
     @Query(value = "SELECT SUM(total) FROM bills WHERE DATE(bill_date) = CURRENT_DATE", nativeQuery = true)
-    Double getTodaySales();
+    BigDecimal  getTodaySales();
 
     @Query(value = "SELECT COUNT(*) FROM bills", nativeQuery = true)
     Long getTotalBills();
 
     @Query(value = """
-            SELECT bill_number as billNumber,
-                   bill_date as billDate,
-                   total as totalAmount
-            FROM bills
-            ORDER BY bill_date DESC
-            LIMIT 5
-            """, nativeQuery = true)
+        SELECT id,
+               bill_number as billNumber,
+               bill_date as billDate,
+               total as totalAmount
+        FROM bills
+        ORDER BY bill_date DESC
+        LIMIT 5
+        """, nativeQuery = true)
     List<RecentBillDto> getRecentBills();
 
     @Query(value = """

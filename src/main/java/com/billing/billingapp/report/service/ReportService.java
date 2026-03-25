@@ -7,8 +7,5 @@ import java.util.List;
 
 public interface ReportService {
 
-    List<SalesReportDto> getSalesReport(
-            LocalDateTime fromDate,
-            LocalDateTime toDate
-    );
+    List<SalesReportDto> getSalesReport(LocalDateTime fromDate, LocalDateTime toDate);
 }

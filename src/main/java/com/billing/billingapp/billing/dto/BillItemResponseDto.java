@@ -34,7 +34,24 @@ public class BillItemResponseDto {
     private BigDecimal lineTotal;
     private BigDecimal gstPercent;
     private BigDecimal gstAmount;
+    private BigDecimal balanceAmount;
+    private String paymentType;
 
+    public String getPaymentType() {
+        return paymentType;
+    }
+
+    public void setPaymentType(String paymentType) {
+        this.paymentType = paymentType;
+    }
+
+    public BigDecimal getBalanceAmount() {
+        return balanceAmount;
+    }
+
+    public void setBalanceAmount(BigDecimal balanceAmount) {
+        this.balanceAmount = balanceAmount;
+    }
 
     public BillItemResponseDto() {
 

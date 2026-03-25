@@ -1,5 +1,6 @@
 package com.billing.billingapp.dashboard.controller;
 
+import com.billing.billingapp.dashboard.dto.DashboardDto;
 import com.billing.billingapp.dashboard.dto.SalesDashboardResponseDto;
 import com.billing.billingapp.dashboard.service.DashboardService;
 import com.billing.billingapp.product.Product;
@@ -24,5 +25,10 @@ public class DashboardController {
     @GetMapping("/low-stock")
     public ResponseEntity<List<Product>> getLowStockProducts() {
         return ResponseEntity.ok(dashboardService.getLowStockProducts());
+    }
+
+    @GetMapping("/dashboard")
+    public DashboardDto getDashboard() {
+        return dashboardService.getDashboard();
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -26,11 +27,12 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
 
     @Query("""
 select new com.billing.billingapp.report.dto.SalesReportDto(
+    b.id,
     b.billNumber,
     b.billDate,
     b.customerName,
     b.total,
-    b.status
+    b.paymentType
 )
 from Bill b
 where b.active = true
@@ -42,4 +44,9 @@ order by b.billDate desc
             @Param("toDate") LocalDateTime toDate
     );
 
+    @Query("SELECT COALESCE(SUM(b.total - b.balanceAmount), 0) FROM Bill b WHERE b.active = true")
+    BigDecimal getTotalReceived();
+
+    @Query("SELECT COALESCE(SUM(b.balanceAmount), 0) FROM Bill b WHERE b.active = true")
+    BigDecimal getTotalPending();
 }
